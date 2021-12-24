@@ -15,6 +15,7 @@ test('ids should be equals', () => {
         order: 0,
     }
 
+
     const action = addTodolistAC(todolist.title);
 
     const endTasksState = tasksReducer(startTaskState, action);
