@@ -5,10 +5,10 @@ import {
     changeTodolistFilterAC, changeTodolistTitleAC,
     FilterValuesType,
     removeTodolistAC, fetchTodolistsTC,
-    TodolistDomainType
+    TodolistDomainType, removeTodolistTC
 } from "./todolists-reducer";
 import React, {useCallback, useEffect} from "react";
-import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC} from "./tasks-reducer";
+import {addTaskAC, addTaskTC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC, removeTaskTC} from "./tasks-reducer";
 import {TaskStatuses} from "../../api/todolists-api";
 import Grid from "@mui/material/Grid/Grid";
 import {AddItemForm} from "../../Components/AddItemForm/AddItemForm";
@@ -27,11 +27,13 @@ export const TodolistsList = () => {
     }, [])
 
     const removeTask = useCallback(function (id: string, todolistId: string) {
-        dispatch(removeTaskAC(id, todolistId));
+       // dispatch(removeTaskAC(id, todolistId));
+        dispatch(removeTaskTC(id, todolistId));
     }, []);
 
     const addTask = useCallback(function (title: string, todolistId: string) {
-        dispatch(addTaskAC(title, todolistId));
+        //dispatch(addTaskAC(title, todolistId));
+        dispatch(addTaskTC(title,todolistId));
     }, []);
 
     const changeStatus = useCallback(function (id: string, status: TaskStatuses, todolistId: string) {
@@ -47,7 +49,8 @@ export const TodolistsList = () => {
     }, []);
 
     const removeTodolist = useCallback(function (id: string) {
-        dispatch(removeTodolistAC(id));
+        //dispatch(removeTodolistAC(id));
+        dispatch(removeTodolistTC(id));
     }, []);
 
     const changeTodolistTitle = useCallback(function (id: string, title: string) {
