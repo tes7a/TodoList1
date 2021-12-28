@@ -2,7 +2,6 @@ import {addTodolistAC, removeTodolistAC, setTodolistsAC} from "./todolists-reduc
 import {
     addTaskAC,
     updateTaskAC,
-    changeTaskTitleAC,
     removeTaskAC,
     setTasksAC,
     tasksReducer
@@ -77,7 +76,7 @@ test('correct task should be added to correct array', () => {
 })
 
 test('status of specified task should be changed', () => {
-   const action = updateTaskAC('1', TaskStatuses.New, 'todolistId2');
+   const action = updateTaskAC('1', {status: TaskStatuses.New}, 'todolistId2');
 
     const endState = tasksReducer(startState, action)
 
@@ -86,7 +85,7 @@ test('status of specified task should be changed', () => {
 })
 
 test('title of specified task should be changed', () => {
-    const action = changeTaskTitleAC('2', 'yogurt', 'todolistId2');
+    const action = updateTaskAC('2', {title: "yogurt"}, 'todolistId2');
 
     const endState = tasksReducer(startState, action)
 

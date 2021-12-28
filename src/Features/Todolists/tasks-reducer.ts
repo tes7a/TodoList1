@@ -10,12 +10,7 @@ export const tasksReducer = (state: TasksStateType = initialState, action: Actio
             return {...state, [action.todolistId]: state[action.todolistId].filter(t => t.id !== action.taskId)};
         case 'ADD-TASK':
             return {...state, [action.task.todoListId]: [...state[action.task.todoListId], action.task]};
-        case 'UPDATE-TASK-STATUS':
-            return {
-                ...state, [action.todolistId]: state[action.todolistId]
-                    .map(t => t.id === action.taskId ? {...t, ...action.model} : t)
-            }
-        case 'CHANGE-TASK-TITLE':
+        case 'UPDATE-TASK':
             return {
                 ...state, [action.todolistId]: state[action.todolistId]
                     .map(t => t.id === action.taskId ? {...t, ...action.model} : t)
@@ -53,12 +48,8 @@ export const addTaskAC = (task: TaskType) => {
     return {type: 'ADD-TASK', task} as const
 }
 export const updateTaskAC = (taskId: string, model: UpdateDomainTaskModelType, todolistId: string) => {
-    return {type: 'UPDATE-TASK-STATUS', todolistId, model, taskId} as const
+    return {type: 'UPDATE-TASK', todolistId, model, taskId} as const
 }
-export const changeTaskTitleAC = (taskId: string, model: UpdateDomainTaskModelType, todolistId: string) => {
-    return {type: 'CHANGE-TASK-TITLE', model, todolistId, taskId} as const
-}
-
 export const setTasksAC = (tasks: Array<TaskType>, todolistId: string) => {
     return {type: 'SET-TASKS', tasks, todolistId} as const
 }
@@ -108,7 +99,7 @@ export const changeTaskStatusTC = (taskId: string, domainModel: UpdateDomainTask
 
         todolistsAPI.updateTask(todolistId, taskId, apiModel)
             .then(res => {
-                dispatch(updateTaskAC(taskId, apiModel, todolistId))
+                dispatch(updateTaskAC(taskId, domainModel, todolistId))
             })
     }
 
@@ -133,7 +124,7 @@ export const changeTaskTitleTC = (taskId: string, domainModel: UpdateDomainTaskM
 
         todolistsAPI.updateTask(todolistId, taskId, apiModel)
             .then(res => {
-                dispatch(changeTaskTitleAC(taskId, apiModel, todolistId))
+                dispatch(updateTaskAC(taskId, domainModel, todolistId))
             })
     }
 
@@ -142,7 +133,7 @@ type ActionsType =
     | ReturnType<typeof removeTaskAC>
     | ReturnType<typeof addTaskAC>
     | ReturnType<typeof updateTaskAC>
-    | ReturnType<typeof changeTaskTitleAC>
+    | ReturnType<typeof updateTaskAC>
     | AddTodolistActionType
     | RemoveTodolistActionType
     | SetTodolistActionType
