@@ -1,7 +1,7 @@
 import {addTodolistAC, removeTodolistAC, setTodolistsAC} from "./todolists-reducer";
 import {
     addTaskAC,
-    changeTaskStatusAC,
+    updateTaskAC,
     changeTaskTitleAC,
     removeTaskAC,
     setTasksAC,
@@ -77,7 +77,7 @@ test('correct task should be added to correct array', () => {
 })
 
 test('status of specified task should be changed', () => {
-   const action = changeTaskStatusAC('1', TaskStatuses.New, 'todolistId2');
+   const action = updateTaskAC('1', TaskStatuses.New, 'todolistId2');
 
     const endState = tasksReducer(startState, action)
 
@@ -110,7 +110,14 @@ test('empty arrays should be added when we set todolists', () => {
 })
 
 test('new array should be added when new todolist is added', () => {
-    const action = addTodolistAC('new todolist');
+    const newTodolist = {
+        id: 'todolist1',
+        title: 'newTodolist',
+        addedDate: '',
+        order: 0
+    }
+    
+    const action = addTodolistAC(newTodolist);
 
     const endState = tasksReducer(startState, action)
 

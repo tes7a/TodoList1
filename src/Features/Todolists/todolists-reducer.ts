@@ -2,6 +2,7 @@ import {Dispatch} from 'redux';
 import {v1} from 'uuid';
 import {todolistsAPI, TodolistType} from '../../api/todolists-api'
 import {fetchTasksTC} from "./tasks-reducer";
+import {AppRootStateType} from "../../App/store";
 
 export const todolistsReducer = (state: Array<TodolistDomainType> = initialState, action: ActionsType): Array<TodolistDomainType> => {
     switch (action.type) {
@@ -69,8 +70,14 @@ export const changeTodolistTitleTC = (todolistId: string, title: string) => (dis
         })
 }
 
-export const changeTodolistFilterTC = (filter: FilterValuesType, todolistId: string) => (dispatch: Dispatch) => {
-    todolistsAPI.updateTodolist(todolistId, filter)
+export const changeTodolistFilterTC = (todolistId: string, filter: FilterValuesType) => (dispatch: Dispatch, getState: () => AppRootStateType) => {
+    const state = getState();
+    const todolist = state.todolists.find(tl => tl.id === todolistId);
+    if(!todolist){
+        throw new Error("todolist not found")
+    }
+
+    todolistsAPI.updateTodolist(todolistId, todolist.title)
         .then(res => {
             dispatch(changeTodolistFilterAC(todolistId, filter))
         })
