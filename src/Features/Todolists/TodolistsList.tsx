@@ -5,7 +5,7 @@ import {
     changeTodolistFilterAC, changeTodolistTitleAC,
     FilterValuesType,
     removeTodolistAC, fetchTodolistsTC,
-    TodolistDomainType, removeTodolistTC
+    TodolistDomainType, removeTodolistTC, addTodolistTC, changeTodolistTitleTC, changeTodolistFilterTC
 } from "./todolists-reducer";
 import React, {useCallback, useEffect} from "react";
 import {addTaskAC, addTaskTC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC, removeTaskTC} from "./tasks-reducer";
@@ -45,7 +45,8 @@ export const TodolistsList = () => {
     }, []);
 
     const changeFilter = useCallback(function (value: FilterValuesType, todolistId: string) {
-        dispatch(changeTodolistFilterAC(todolistId, value));
+        //dispatch(changeTodolistFilterAC(todolistId, value));
+        dispatch(changeTodolistFilterTC(value, todolistId));
     }, []);
 
     const removeTodolist = useCallback(function (id: string) {
@@ -54,11 +55,13 @@ export const TodolistsList = () => {
     }, []);
 
     const changeTodolistTitle = useCallback(function (id: string, title: string) {
-        dispatch(changeTodolistTitleAC(id, title));
+        //dispatch(changeTodolistTitleAC(id, title));
+        dispatch(changeTodolistTitleTC(id, title));
     }, []);
 
     const addTodolist = useCallback((title: string) => {
-        dispatch(addTodolistAC(title));
+        //dispatch(addTodolistAC(title));
+        dispatch(addTodolistTC(title));
     }, [dispatch]);
 
     return(
