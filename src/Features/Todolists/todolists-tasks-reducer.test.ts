@@ -13,6 +13,7 @@ test('ids should be equals', () => {
         id: 'any id',
         addedDate: '',
         order: 0,
+        entityStatus: 'succeeded',
     }
 
 

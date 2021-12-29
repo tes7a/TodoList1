@@ -1,17 +1,16 @@
-import {Dispatch} from "redux";
-import {todolistsAPI} from "../api/todolists-api";
-import {setTodolistsAC} from "../Features/Todolists/todolists-reducer";
-
 export type RequestStatusType = 'idle' | 'loading' | 'succeeded' | 'failed'
 
 const initialState = {
-    status: 'loading' as RequestStatusType
+    status: 'loading' as RequestStatusType,
+    error: null//'Error!😠',
 }
 
 export const appReducer = (state: InitialStateType = initialState, action: ActionsType): InitialStateType => {
     switch (action.type) {
         case 'APP/SET-STATUS':
             return {...state, status: action.status}
+        case "APP/SET-ERROR":
+            return {...state, error: action.error}
         default:
             return state
     }
@@ -19,8 +18,15 @@ export const appReducer = (state: InitialStateType = initialState, action: Actio
 
 // action
 export const setAppStatusAC = (status: RequestStatusType) => ({type: 'APP/SET-STATUS', status} as const);
+export const setAppErrorAC = (error: string | null) => ({type: 'APP/SET-ERROR', error}as const);
 
 // type
 export type AppSetStatusType = ReturnType<typeof setAppStatusAC>;
-type InitialStateType = typeof initialState
-type ActionsType = AppSetStatusType
+export type AppErrorType = ReturnType<typeof setAppErrorAC>;
+export type InitialStateType = {
+    status: 'idle' | 'loading' | 'succeeded' | 'failed',
+    error: string | null,
+}
+type ActionsType =
+    | AppSetStatusType
+    | AppErrorType
