@@ -55,6 +55,7 @@ export const fetchTodolistsTC = () => (dispatch: Dispatch<ActionsType>) => {
 
 export const removeTodolistTC = (todolistId: string) => (dispatch: Dispatch<ActionsType>) => {
     dispatch(setAppStatusAC('loading'));
+    dispatch(changeTodolistEntityStatusAC(todolistId, 'loading'));
     todolistsAPI.deleteTodolist(todolistId)
         .then(res => {
             dispatch(removeTodolistAC(todolistId));
@@ -86,22 +87,6 @@ export const changeTodolistTitleTC = (todolistId: string, title: string) => (dis
     todolistsAPI.updateTodolist(todolistId, title)
         .then(res => {
             dispatch(changeTodolistTitleAC(todolistId, title));
-            dispatch(setAppStatusAC('succeeded'));
-        })
-}
-
-export const changeTodolistFilterTC = (todolistId: string, filter: FilterValuesType) =>
-    (dispatch: Dispatch<ActionsType | AppErrorType>, getState: () => AppRootStateType) => {
-    dispatch(setAppStatusAC('loading'));
-    const state = getState();
-    const todolist = state.todolists.find(tl => tl.id === todolistId);
-    if (!todolist) {
-        throw new Error("todolist not found")
-    }
-
-    todolistsAPI.updateTodolist(todolistId, todolist.title)
-        .then(res => {
-            dispatch(changeTodolistFilterAC(todolistId, filter));
             dispatch(setAppStatusAC('succeeded'));
         })
 }

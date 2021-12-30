@@ -3,7 +3,11 @@ import {AppRootStateType} from "../../App/store";
 import {
     FilterValuesType,
     fetchTodolistsTC,
-    TodolistDomainType, removeTodolistTC, addTodolistTC, changeTodolistTitleTC, changeTodolistFilterTC
+    TodolistDomainType,
+    removeTodolistTC,
+    addTodolistTC,
+    changeTodolistTitleTC,
+    changeTodolistFilterAC
 } from "./todolists-reducer";
 import React, {useCallback, useEffect} from "react";
 import {
@@ -47,7 +51,7 @@ export const TodolistsList = () => {
     }, []);
 
     const changeFilter = useCallback(function (value: FilterValuesType, todolistId: string) {
-        dispatch(changeTodolistFilterTC(todolistId, value));
+        dispatch(changeTodolistFilterAC(todolistId, value));
     }, []);
 
     const removeTodolist = useCallback(function (id: string) {
@@ -76,7 +80,6 @@ export const TodolistsList = () => {
                             <Paper style={{padding: '10px'}}>
                                 <Todolist
                                     todolist={tl}
-                                    entityStatus={tl.entityStatus}
                                     tasks={allTodolistTasks}
                                     removeTask={removeTask}
                                     changeFilter={changeFilter}
