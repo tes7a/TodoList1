@@ -13,8 +13,7 @@ import React, {useCallback, useEffect} from "react";
 import {
     addTaskTC,
     updateTaskAC,
-    changeTaskStatusTC,
-    changeTaskTitleTC,
+    updateTaskTC,
     removeTaskTC
 } from "./tasks-reducer";
 import {TaskStatuses} from "../../api/todolists-api";
@@ -39,15 +38,15 @@ export const TodolistsList = () => {
     }, []);
 
     const addTask = useCallback(function (title: string, todolistId: string) {
-        dispatch(addTaskTC(title,todolistId));
+        dispatch(addTaskTC(title, todolistId));
     }, []);
 
     const changeStatus = useCallback(function (id: string, status: TaskStatuses, todolistId: string) {
-        dispatch(changeTaskStatusTC(id, {status}, todolistId));
+        dispatch(updateTaskTC(id, {status}, todolistId));
     }, []);
 
     const changeTaskTitle = useCallback(function (id: string, newTitle: string, todolistId: string) {
-        dispatch(changeTaskTitleTC(id,{title: newTitle},todolistId));
+        dispatch(updateTaskTC(id, {title: newTitle}, todolistId));
     }, []);
 
     const changeFilter = useCallback(function (value: FilterValuesType, todolistId: string) {
@@ -66,7 +65,7 @@ export const TodolistsList = () => {
         dispatch(addTodolistTC(title));
     }, [dispatch]);
 
-    return(
+    return (
         <>
             <Grid container style={{padding: '20px'}}>
                 <AddItemForm addItem={addTodolist}/>
