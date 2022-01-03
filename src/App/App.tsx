@@ -14,6 +14,8 @@ import {useSelector} from "react-redux";
 import {AppRootStateType} from "./store";
 import {RequestStatusType} from "./app-reducer";
 import {ErrorSnackbar} from "../Components/ErrorSnackbar/ErrorSnackbar";
+import { Login } from '../Features/Login/Login';
+import {Navigate, Route, Routes} from 'react-router-dom';
 
 export type TasksStateType = {
     [key: string]: Array<TaskType>
@@ -39,7 +41,12 @@ function App() {
                 {status === "loading" && <LinearProgress color="secondary"/>}
             </AppBar>
             <Container fixed>
-                <TodolistsList/>
+                <Routes>
+                    <Route path="/" element={<TodolistsList />}/>
+                    <Route path="login" element={<Login />}/>
+                    <Route path="/404" element={<h1 style={{textAlign: "center" }}>404. Page not found</h1>}/>
+                    <Route path="*" element={<Navigate to='/404'/>}/>
+                </Routes>
             </Container>
         </div>
     );
