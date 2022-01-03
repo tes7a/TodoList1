@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useCallback, useEffect} from 'react'
 import './App.css';
 import {TaskType} from '../api/todolists-api'
 import AppBar from '@mui/material/AppBar/AppBar';
@@ -9,21 +9,40 @@ import Button from '@mui/material/Button/Button';
 import Container from '@mui/material/Container/Container';
 import {Menu} from '@mui/icons-material';
 import {TodolistsList} from '../Features/Todolists/TodolistsList';
-import {LinearProgress} from "@mui/material";
-import {useSelector} from "react-redux";
+import {CircularProgress, LinearProgress} from "@mui/material";
+import {useDispatch, useSelector} from "react-redux";
 import {AppRootStateType} from "./store";
-import {RequestStatusType} from "./app-reducer";
+import {RequestStatusType, setInitializedTC} from "./app-reducer";
 import {ErrorSnackbar} from "../Components/ErrorSnackbar/ErrorSnackbar";
-import { Login } from '../Features/Login/Login';
+import {Login} from '../Features/Login/Login';
 import {Navigate, Route, Routes} from 'react-router-dom';
+import {logoutTC} from "../Features/Login/auth-reducer";
 
 export type TasksStateType = {
     [key: string]: Array<TaskType>
 }
 
 function App() {
-
+    const isLoggedIn = useSelector<AppRootStateType, boolean>(state => state.auth.isLoggedIn)
+    const isInitialized = useSelector<AppRootStateType, boolean>(state => state.app.isInitialized)
     const status = useSelector<AppRootStateType, RequestStatusType>(state => state.app.status);
+
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(setInitializedTC());
+    }, [])
+
+    const logOut = useCallback(() => {
+        dispatch(logoutTC())
+    },[]);
+
+    if (!isInitialized) {
+        return <div style={{position: 'fixed', top: '30%', textAlign: 'center', width: '100%'}}>
+            <CircularProgress color="secondary"/>
+        </div>
+    }
+
 
     return (
         <div className="App">
@@ -36,15 +55,17 @@ function App() {
                     <Typography variant="h6">
                         News
                     </Typography>
-                    <Button color="inherit">Login</Button>
+                    {isLoggedIn && <Button color="inherit" onClick={logOut}
+                                           style={{position: 'fixed', left: '90%', fontWeight: 'bold'}}>Log
+                        out</Button>}
                 </Toolbar>
                 {status === "loading" && <LinearProgress color="secondary"/>}
             </AppBar>
             <Container fixed>
                 <Routes>
-                    <Route path="/" element={<TodolistsList />}/>
-                    <Route path="login" element={<Login />}/>
-                    <Route path="/404" element={<h1 style={{textAlign: "center" }}>404. Page not found</h1>}/>
+                    <Route path="/" element={<TodolistsList/>}/>
+                    <Route path="/login" element={<Login/>}/>
+                    <Route path="/404" element={<h1 style={{textAlign: "center"}}>404. Page not found</h1>}/>
                     <Route path="*" element={<Navigate to='/404'/>}/>
                 </Routes>
             </Container>
