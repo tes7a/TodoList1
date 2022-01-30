@@ -1,7 +1,7 @@
 import {Dispatch} from "redux";
 import {authAPI} from "../api/todolists-api";
 import {handleServerAppError, handleServerNetworkError} from "../utils/error-utils";
-import {setIsLoggedInAC, SetIsLoggedInType} from "../Features/Login/auth-reducer";
+import {setIsLoggedInAC,} from "../Features/Login/auth-reducer";
 
 export type RequestStatusType = 'idle' | 'loading' | 'succeeded' | 'failed'
 
@@ -30,12 +30,12 @@ export const setAppErrorAC = (error: string | null) => ({type: 'APP/SET-ERROR', 
 export const setInitializedAC = (initialized: boolean) => ({type: 'APP/SET-IS-INITIALIZED', initialized}as const);
 
 // thunk
-export const setInitializedTC = () => (dispatch: Dispatch<ActionsType>) => {
+export const setInitializedTC = () => (dispatch: Dispatch) => {
     dispatch(setAppStatusAC('loading'));
     authAPI.me()
         .then(res => {
             if (res.data.resultCode === 0) {
-                dispatch(setIsLoggedInAC(true));
+                dispatch(setIsLoggedInAC({value: true}));
                 dispatch(setAppStatusAC('succeeded'));
             } else {
                 handleServerAppError(res.data, dispatch);
@@ -60,4 +60,3 @@ type ActionsType =
     | AppSetStatusType
     | AppErrorType
     | SetIsInitializedType
-    | SetIsLoggedInType
