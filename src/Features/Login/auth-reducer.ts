@@ -1,5 +1,5 @@
 import { Dispatch } from 'redux'
-import { AppErrorType, setAppStatusAC, AppSetStatusType } from '../../App/app-reducer'
+import {setAppStatusAC} from '../../App/app-reducer'
 import {authAPI, DataType} from "../../api/todolists-api";
 import {handleServerAppError, handleServerNetworkError} from "../../utils/error-utils";
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
@@ -23,12 +23,12 @@ export const {setIsLoggedInAC} = slice.actions;
 
 // thunks
 export const loginTC = (data: DataType) => (dispatch: Dispatch) => {
-    dispatch(setAppStatusAC('loading'))
+    dispatch(setAppStatusAC({status: 'loading'}))
     authAPI.login(data)
         .then(res => {
             if (res.data.resultCode === 0) {
                 dispatch(setIsLoggedInAC({value: true}));
-                dispatch(setAppStatusAC('succeeded'));
+                dispatch(setAppStatusAC({status: 'succeeded'}));
             } else {
                 handleServerAppError(res.data, dispatch);
             }
@@ -37,14 +37,13 @@ export const loginTC = (data: DataType) => (dispatch: Dispatch) => {
             handleServerNetworkError(error.message, dispatch);
         })
 }
-
 export const logoutTC = () => (dispatch: Dispatch) => {
-    dispatch(setAppStatusAC('loading'))
+    dispatch(setAppStatusAC({status: 'loading'}))
     authAPI.logout()
         .then(res => {
             if (res.data.resultCode === 0) {
                 dispatch(setIsLoggedInAC({value: false}))
-                dispatch(setAppStatusAC('succeeded'))
+                dispatch(setAppStatusAC({status: 'succeeded'}))
             } else {
                 handleServerAppError(res.data, dispatch)
             }
