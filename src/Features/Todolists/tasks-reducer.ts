@@ -20,8 +20,8 @@ const slice = createSlice({
                 tasks.splice(index, 1)
             }
         },
-        addTaskAC(state, action: PayloadAction<{task: TaskType}>){
-            const todolist = state[action.payload.task.todoListId].unshift(action.payload.task)
+        addTaskAC(state, action: PayloadAction<TaskType>){
+            const todolist = state[action.payload.todoListId].unshift(action.payload)
         },
         updateTaskAC(state, action: PayloadAction<{taskId: string,
             model: UpdateDomainTaskModelType, todolistId: string}>){
@@ -88,7 +88,7 @@ export const addTaskTC = (title: string, todolistId: string) => (dispatch: Dispa
     todolistsAPI.createTask(todolistId, title)
         .then(res => {
             if (res.data.resultCode === 0) {
-                dispatch(addTaskAC({task: res.data.data.item}));
+                dispatch(addTaskAC(res.data.data.item));
                 dispatch(setAppStatusAC({status: 'succeeded'}));
             } else {
                 handleServerAppError(res.data, dispatch);
