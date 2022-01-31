@@ -15,7 +15,7 @@ const slice = createSlice({
     reducers:{
         removeTaskAC(state, action: PayloadAction<{taskId: string, todolistId: string}>){
             const tasks = state[action.payload.todolistId];
-            const index = tasks.findIndex(t => t.id === action.payload.todolistId)
+            const index = tasks.findIndex(t => t.id === action.payload.taskId)
             if(index > -1) {
                 tasks.splice(index, 1)
             }
@@ -72,7 +72,7 @@ export const removeTaskTC = (taskId: string, todolistId: string) => (dispatch: D
     todolistsAPI.deleteTask(todolistId, taskId)
         .then((res) => {
             if (res.data.resultCode === 0) {
-                dispatch(removeTaskAC({taskId: taskId, todolistId: todolistId}));
+                dispatch(removeTaskAC({taskId, todolistId}));
                 dispatch(setAppStatusAC({status: 'succeeded'}));
             } else {
                 handleServerAppError(res.data, dispatch);
